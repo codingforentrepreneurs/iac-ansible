@@ -1,6 +1,8 @@
 
 - hosts: loadbalancer
   become: yes
+  roles:
+    - ./../roles/nginx
   tasks:
     - name: Add Nginx Config
       template:

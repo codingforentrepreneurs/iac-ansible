@@ -1,7 +1,4 @@
 ---
-- name: Install Nginx
-  import_playbook: ./playbooks/install-nginx.yaml
-
 - name: Update Webapps
   import_playbook: ./playbooks/webapps.yaml
 

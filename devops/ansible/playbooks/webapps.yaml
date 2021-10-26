@@ -4,6 +4,8 @@
   vars:
       title: Hello there
       description: Some more news!
+  roles:
+    - ./../roles/nginx
   tasks:
     - name: Update Nginx Default Homepage
       template:
