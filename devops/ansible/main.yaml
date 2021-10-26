@@ -7,3 +7,9 @@
         name: nginx
         state: present
         update_cache: yes
+    - name: Update Nginx Default Homepage
+      copy:
+        dest: /var/www/html/index.nginx-debian.html
+        content: |
+          <h1>Hello World</h1>
+          <p>This is awesome</p>
