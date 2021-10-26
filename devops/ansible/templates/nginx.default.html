@@ -3,5 +3,11 @@
     <body>
         <h1>{{ title }} - {{ inventory_hostname }}</h1>
         <p>{{ description }}</p>
+        <div>
+            {% for host in groups['webapps'] %}
+                <p>{{ host }}</p>
+            {% endfor %}
+            {{ groups['loadbalancer'] }}
+        </div>
     </body>
 </html>

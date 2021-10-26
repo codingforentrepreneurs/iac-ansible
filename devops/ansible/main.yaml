@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: webapps
   become: yes
   vars:
       title: Hello there
@@ -14,3 +14,26 @@
       template:
         dest: /var/www/html/index.nginx-debian.html
         src: ./templates/nginx.default.html
+
+
+- hosts: loadbalancer
+  become: yes
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+    - name: Add Nginx Config
+      template:
+        src: ./templates/nginx.conf
+        dest: /etc/nginx/sites-available/default
+    - name: Enable New Nginx Config
+      file:
+        src: /etc/nginx/sites-available/default
+        dest: /etc/nginx/sites-enabled/default
+        state: link
+    - name: Restart Nginx
+      service:
+         name: nginx
+         state: restarted
