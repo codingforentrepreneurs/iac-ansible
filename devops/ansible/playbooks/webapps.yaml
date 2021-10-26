@@ -1,0 +1,11 @@
+---
+- hosts: webapps
+  become: yes
+  vars:
+      title: Hello there
+      description: Some more news!
+  tasks:
+    - name: Update Nginx Default Homepage
+      template:
+        dest: /var/www/html/index.nginx-debian.html
+        src: ./../templates/nginx.default.html
