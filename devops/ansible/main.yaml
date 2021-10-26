@@ -1,6 +1,9 @@
 ---
 - hosts: all
   become: yes
+  vars:
+      title: Hello there
+      description: Some more news!
   tasks:
     - name: Install Nginx
       apt:
