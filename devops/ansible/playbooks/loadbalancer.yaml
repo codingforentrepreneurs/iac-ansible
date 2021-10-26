@@ -8,12 +8,14 @@
       template:
         src: ./../templates/nginx.conf
         dest: /etc/nginx/sites-available/default
+      notify: reload nginx
     - name: Enable New Nginx Config
       file:
         src: /etc/nginx/sites-available/default
         dest: /etc/nginx/sites-enabled/default
         state: link
-    - name: Restart Nginx
+  handlers:
+    - name: reload nginx
       service:
          name: nginx
-         state: restarted
+         state: reloaded
