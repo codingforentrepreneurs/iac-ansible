@@ -14,8 +14,3 @@
         src: /etc/nginx/sites-available/default
         dest: /etc/nginx/sites-enabled/default
         state: link
-  handlers:
-    - name: reload nginx
-      service:
-         name: nginx
-         state: reloaded
