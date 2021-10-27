@@ -2,14 +2,25 @@
 - hosts: webapps
   become: yes
   vars:
-      title: Hello there
-      description: Some more news!
+    root_dir: "~/iac-ansible"
+    dest_dir: /var/www
   roles:
-    - ./../roles/nginx
+    - ./../roles/nginx_purge
     - ./../roles/docker
   tasks:
-    - name: Update Nginx Default Homepage
-      template:
-        dest: /var/www/html/index.nginx-debian.html
-        src: ./../templates/nginx.default.html
-      notify: reload nginx
+    - name: Setup /var/www/src
+      file:
+        path: "{{ dest_dir }}/src"
+        state: directory
+        mode: 0755
+    - name: Copy Src folder
+      copy:
+        src: "{{ root_dir }}/src/"
+        dest: "{{ dest_dir }}/src/"
+    - copy:
+        src: "{{ root_dir }}/{{ item }}"
+        dest: "{{ dest_dir }}"
+      with_items:
+        - Dockerfile
+        - requirements.txt
+        - entrypoint.sh
