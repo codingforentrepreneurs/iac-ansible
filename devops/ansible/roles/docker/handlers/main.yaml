@@ -1,0 +1,2 @@
+- name: exec docker script
+  shell: /tmp/get-docker.sh

@@ -6,6 +6,7 @@
       description: Some more news!
   roles:
     - ./../roles/nginx
+    - ./../roles/docker
   tasks:
     - name: Update Nginx Default Homepage
       template:

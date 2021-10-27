@@ -3,6 +3,7 @@
   become: yes
   roles:
     - ./../roles/nginx
+    - ./../roles/docker
   tasks:
     - name: Add Nginx Config
       template:
