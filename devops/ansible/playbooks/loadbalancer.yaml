@@ -2,7 +2,7 @@
 - hosts: loadbalancer
   become: yes
   roles:
-    - ./../roles/nginx
+    - ./../roles/nginx_purge
     - ./../roles/docker
   tasks:
     - name: Add Nginx Config

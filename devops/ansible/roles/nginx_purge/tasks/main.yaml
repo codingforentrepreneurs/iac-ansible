@@ -1,0 +1,13 @@
+- name: Remove Nginx
+  apt:
+    name: "{{ item }}"
+    state: absent
+    purge: yes
+  with_items:
+    - nginx
+- name: Stop Nginx Services
+  service:
+    name: "{{ item }}"
+    state: stopped
+  with_items:
+    - nginx
