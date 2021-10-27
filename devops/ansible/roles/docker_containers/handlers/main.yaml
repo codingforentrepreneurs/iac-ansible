@@ -1,8 +1,19 @@
+- name: docker build
+  vars:
+    _docker_app_name: app
+  shell:
+    cmd: docker build -f Dockerfile -t "{{ docker_app_name | default(_docker_app_name) }}" .
+    chdir: "{{ dest_dir }}"
+
+
 - name: docker stop containers
   shell: docker stop $(docker ps -aq)
+  ignore_errors: yes
   when: containers_running.rc == 0
+
 - name: docker remove containers
   shell: docker rm $(docker ps -aq)
+  ignore_errors: yes
   when: containers_running.rc == 0
   
 - name: docker run nginx lb
@@ -10,6 +21,18 @@
     - _nginx_lb_path: /etc/nginx/conf.d/default.conf
   shell: |
     docker run \
+    --restart always \
     -v {{ nginx_lb_conf_path | default(_nginx_lb_path) }}:/etc/nginx/conf.d/default.conf:ro \
     -p 80:80 \
     -d nginx
+
+
+- name: docker run app
+  vars:
+    _docker_app_name: app
+  shell: |
+    docker run \
+    --restart always \
+    -p 80:8001 \
+    -e PORT=8001 \
+    -d "{{ docker_app_name | default(_docker_app_name) }}"

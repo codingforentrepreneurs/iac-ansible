@@ -3,10 +3,11 @@
   become: yes
   vars:
     root_dir: "~/iac-ansible"
-    dest_dir: /var/www
+    dest_dir: /var/www/app
+    docker_app_name: app
   roles:
-    - ./../roles/nginx_purge
     - ./../roles/docker
+    - ./../roles/docker_containers
   tasks:
     - name: Setup /var/www/src
       file:
@@ -17,10 +18,20 @@
       copy:
         src: "{{ root_dir }}/src/"
         dest: "{{ dest_dir }}/src/"
+      register: app_folder
     - copy:
         src: "{{ root_dir }}/{{ item }}"
         dest: "{{ dest_dir }}"
+      register: app_files
       with_items:
         - Dockerfile
         - requirements.txt
         - entrypoint.sh
+    - name: Trigger Build & Run
+      shell: echo "Running build"
+      # when: (app_files.changed) or (app_folder.changed)
+      notify:
+        - docker build
+        - docker stop containers
+        - docker remove containers
+        - docker run app 
