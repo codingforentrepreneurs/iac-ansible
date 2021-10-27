@@ -14,6 +14,15 @@
       template:
         src: ./../templates/nginx.conf
         dest: /var/www/nginx.conf
+      register: nginx_conf_dict
+    - debug: msg="{{ nginx_conf_dict }}"
+    - set_fact:
+        nginx_lb_conf_path:  "{{ nginx_conf_dict.path }}"
+    - debug: msg="{{ nginx_lb_conf_path }}"
+    - name: Debug Docker-based Nginx Conf
+      vars:
+        - _nginx_lb_path: /etc/nginx/conf.d/default.conf
+      debug: msg="{{ nginx_lb_conf_path | default(_nginx_lb_path) }}"
     - name: Has Running Docker Images
       shell: docker ps -aq >/dev/null 2>&1
       register: containers_running
@@ -25,8 +34,10 @@
       shell: docker rm $(docker ps -aq)
       when: containers_running.rc == 0
     - name: Run Docker-based Nginx
+      vars:
+        - _nginx_lb_path: /etc/nginx/conf.d/default.conf
       shell: |
         docker run \
-        -v /var/www/nginx.conf:/etc/nginx/conf.d/default.conf:ro \
+        -v {{ nginx_lb_conf_path | default(_nginx_lb_path) }}:/etc/nginx/conf.d/default.conf:ro \
         -p 80:80 \
         -d nginx
