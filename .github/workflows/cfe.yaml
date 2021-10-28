@@ -39,7 +39,7 @@ jobs:
           EOF
       - name: Adding the Inventory
         run: |
-          LINODE_ACCESS_TOKEN=${{ secrets.LINODE_ACCESS_TOKEN }} \
+          export LINODE_ACCESS_TOKEN=${{ secrets.LINODE_ACCESS_TOKEN }}
           cfe services linode inventory --save-path "devops/ansible/inventory.ini" --tags "webapps,loadbalancer"
       - name: Run main playbook
         run: |
