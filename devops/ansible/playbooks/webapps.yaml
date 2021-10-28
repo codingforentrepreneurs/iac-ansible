@@ -2,7 +2,7 @@
 - hosts: webapps
   become: yes
   vars:
-    root_dir: "~/iac-ansible"
+    root_dir: "./../../../"
     dest_dir: /var/www/app
     docker_app_name: app
   roles:
