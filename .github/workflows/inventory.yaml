@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Ansible CICD via Repo Inventory
+name: Ansible CICD via Secret Inventory
 
 # Controls when the workflow will run
 on:
@@ -35,6 +35,11 @@ jobs:
       - name: Update key permissions
         run: |
           chmod 400 devops/ansible/private.pem
+      - name: Create Inventory
+        run: |
+          cat << EOF > devops/ansible/inventory.ini
+          ${{ secrets.ANSIBLE_INVENTORY }}
+          EOF
       - name: Add PEM Key Path to Ansible Config
         run: |
           cat << EOF > devops/ansible/ansible.cfg
