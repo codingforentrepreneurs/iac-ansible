@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Ansible CICD via Secret Inventory
+name: Ansible CICD via CFE CLI
 
 # Controls when the workflow will run
 on:
