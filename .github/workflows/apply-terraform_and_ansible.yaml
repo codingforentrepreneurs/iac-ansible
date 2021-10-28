@@ -34,6 +34,7 @@ jobs:
           linode_pa_token="${{ secrets.LINODE_ACCESS_TOKEN }}"
           authorized_key="${{ secrets.SSH_PUB_KEY }}"
           root_user_pw="${{ secrets.ROOT_USER_PW }}"
+          linode_instance_count="${{ secrets.WEBAPPS_COUNT }}"
           EOF
       - name: Terraform Init
         run: terraform -chdir=./devops/tf init -backend-config=backend
