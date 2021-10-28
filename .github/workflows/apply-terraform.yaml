@@ -1,0 +1,41 @@
+name: Apply Infrastructure via Terraform
+
+on:
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.9
+      - name: Add Terraform Backend for S3
+        run: |
+          cat << EOF > devops/tf/backend
+          skip_credentials_validation = true
+          skip_region_validation = true
+          bucket="tryiac"
+          key="tryiac-ansible.tfstate"
+          region="us-southeast-1"
+          endpoint="us-southeast-1.linodeobjects.com"
+          access_key="${{ secrets.LINODE_OBJECT_STORAGE_ACCESS_KEY }}"
+          secret_key="${{ secrets.LINODE_OBJECT_STORAGE_SECRET_KEY }}"
+          EOF
+      - name: Add Terraform TFVars
+        run: |
+          cat << EOF > devops/tf/terraform.tfvars
+          linode_pa_token="${{ secrets.LINODE_ACCESS_TOKEN }}"
+          authorized_key="${{ secrets.SSH_PUB_KEY }}"
+          root_user_pw="${{ secrets.ROOT_USER_PW }}"
+          EOF
+      - name: Terraform Init
+        run: terraform -chdir=./devops/tf init -backend-config=backend
+      - name: Terraform Validate 
+        run: terraform -chdir=./devops/tf validate -no-color
+      - name: Terraform Apply Changes 
+        run: terraform -chdir=./devops/tf apply -auto-approve
+        
