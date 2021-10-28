@@ -23,8 +23,8 @@ jobs:
           skip_region_validation = true
           bucket="${{ secrets.LINODE_OBJECT_STORAGE_BUCKET }}"
           key="tryiac-ansible.tfstate"
-          region="us-southeast-1"
-          endpoint="us-southeast-1.linodeobjects.com"
+          region="${{ secrets.LINODE_REGION }}"
+          endpoint="${{ secrets.LINODE_REGION }}.linodeobjects.com"
           access_key="${{ secrets.LINODE_OBJECT_STORAGE_ACCESS_KEY }}"
           secret_key="${{ secrets.LINODE_OBJECT_STORAGE_SECRET_KEY }}"
           EOF
