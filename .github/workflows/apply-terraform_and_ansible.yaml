@@ -21,7 +21,7 @@ jobs:
           cat << EOF > devops/tf/backend
           skip_credentials_validation = true
           skip_region_validation = true
-          bucket="tryiac"
+          bucket="${{ secrets.LINODE_OBJECT_STORAGE_BUCKET }}"
           key="tryiac-ansible.tfstate"
           region="us-southeast-1"
           endpoint="us-southeast-1.linodeobjects.com"
