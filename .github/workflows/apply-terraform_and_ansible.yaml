@@ -63,6 +63,7 @@ jobs:
           remote_user="root"
           retries=2
           private_key_file = ./private.pem
+          host_key_checking = False
           EOF
       - name: Run main playbook
         run: |
